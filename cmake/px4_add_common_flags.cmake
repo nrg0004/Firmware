@@ -99,7 +99,6 @@ function(px4_add_common_flags)
 			add_compile_options(
 				-Qunused-arguments
 
-				-Wno-address-of-packed-member # TODO: fix and enable (mavlink, etc)
 				-Wno-unknown-warning-option
 				-Wno-unused-const-variable
 				-Wno-varargs
@@ -114,7 +113,7 @@ function(px4_add_common_flags)
 		endif()
 
 		if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9)
-			add_compile_options(-Wno-address-of-packed-member) # TODO: fix and enable (mavlink, etc)
+			add_compile_options(-Waddress-of-packed-member)
 		endif()
 
 		add_compile_options(
