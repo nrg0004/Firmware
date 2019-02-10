@@ -527,7 +527,17 @@ void FixedwingAttitudeControl::run()
 		}
 
 		/* wait for up to 500ms for data */
-		int pret = px4_poll(&fds[0], (sizeof(fds) / sizeof(fds[0])), 100);
+		int timeout_ms = 500;
+
+		if (_vcontrol_mode.flag_control_manual_enabled &&
+		    !_vcontrol_mode.flag_control_attitude_enabled &&
+		    !_vcontrol_mode.flag_control_rates_enabled) {
+
+			// if manual mode only then decrease timeout to 20 ms (50 Hz)
+			timeout_ms = 20;
+		}
+
+		int pret = px4_poll(&fds[0], (sizeof(fds) / sizeof(fds[0])), timeout_ms);
 
 		/* timed out - periodic check for _task_should_exit, etc. */
 		if (pret == 0) {
